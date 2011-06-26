@@ -43,7 +43,7 @@ namespace PathfindingTest.Units
                     UpdateDefense();
                 }
 
-                if (Game1.GetInstance().frames % 4 == 0 && unitToStalk != null)
+                if (Game1.GetInstance().frames % 4 == 0 && (unitToStalk != null || buildingToDestroy != null))
                 {
                     TryToSwing();
                 }
@@ -102,7 +102,7 @@ namespace PathfindingTest.Units
         /// <summary>
         /// Attempt to fire the weapon!
         /// </summary>
-        public override void Swing()
+        public override void Swing(Damageable target)
         {
             if (this.fireCooldown < 0)
             {

@@ -327,6 +327,20 @@ namespace PathfindingTest.Players
             return null;
         }
 
+        /// <summary>
+        /// Whether the mouse is over a unit or not
+        /// if it is, it'll return it. =D
+        /// </summary>
+        /// <returns>The unit, or null if there was no unit!</returns>
+        public Building GetMouseOverBuilding(LinkedList<Building> buildings)
+        {
+            foreach (Building b in buildings)
+            {
+                if (b.DefineRectangle().Contains(Mouse.GetState().X, Mouse.GetState().Y)) return b;
+            }
+            return null;
+        }
+
         public Building IsMouseOverFriendlyBuilding()
         {
             foreach (Building b in buildings)
@@ -492,7 +506,10 @@ namespace PathfindingTest.Players
         public void OnMouseRelease(MouseEvent m)
         {
             // Bots dont use the mouse, or shouldn't
-            if (Game1.CURRENT_PLAYER != this) return;
+            if (Game1.CURRENT_PLAYER != this)
+            {
+                return;
+            }
             if (selectBox != null && !IsPreviewingBuilding())
             {
                 this.currentSelection = this.GetUnits();
@@ -530,11 +547,22 @@ namespace PathfindingTest.Players
                         {
                             foreach (Unit unit in currentSelection.units)
                             {
-                                unit.Attack(selectedEnemy);
+                                unit.AttackUnit(selectedEnemy);
                             }
+                            return;
                         }
                         else 
                         {
+                            Building enemyBuilding = GetMouseOverBuilding(player.buildings);
+                            if (enemyBuilding != null)
+                            {
+                                foreach (Unit unit in currentSelection.units)
+                                {
+                                    unit.AttackBuilding(enemyBuilding);
+                                }
+                                return;
+                            }
+
                             if (previewPattern != null)
                             {
                                 stopUnitSelection();
@@ -548,7 +576,6 @@ namespace PathfindingTest.Players
                             }
                         }
                         previewPattern = null;
-
                     }
                 }
             }

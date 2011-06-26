@@ -15,10 +15,11 @@ using System.Diagnostics;
 using PathfindingTest.Units.Stores;
 using PathfindingTest.Multiplayer.Data;
 using SocketLibrary.Protocol;
+using PathfindingTest.Combat;
 
 namespace PathfindingTest.Buildings
 {
-    public abstract class Building
+    public abstract class Building : Damageable
     {
 
         public Player p { get; set; }
@@ -464,6 +465,15 @@ namespace PathfindingTest.Buildings
             else
             {
                 this.state = State.Preview;
+            }
+        }
+
+        public void OnDamage(DamageEvent e)
+        {
+            this.currentHealth -= e.damageDone;
+            if (this.currentHealth <= 0)
+            {
+                this.Dispose();
             }
         }
     }
