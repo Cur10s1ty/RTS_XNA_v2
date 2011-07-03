@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using PathfindingTest.Pathfinding;
 using PathfindingTest.Combat;
+using PathfindingTest.Buildings;
 
 namespace PathfindingTest.Units.Projectiles
 {
@@ -14,8 +15,8 @@ namespace PathfindingTest.Units.Projectiles
 
         private Texture2D collisionPointTex { get; set; }
 
-        public Arrow(Unit parent, Unit target)
-            : base(parent, target, DamageEvent.DamageType.Ranged, 3.0f, 300, 15)
+        public Arrow(Unit parent, Damageable target)
+            : base(parent, target, DamageEvent.DamageType.Ranged, 4.0f, 300, 15)
         {
             this.texture = Game1.GetInstance().Content.Load<Texture2D>("Units/Projectiles/wooden_arrow_scale");
             this.collisionPointTex = Game1.GetInstance().Content.Load<Texture2D>("Misc/solid");

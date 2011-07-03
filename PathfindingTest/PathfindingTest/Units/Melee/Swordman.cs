@@ -56,12 +56,12 @@ namespace PathfindingTest.Units.Melee
         /// </summary>
         public override void Swing(Damageable target)
         {
-            AggroEvent e = new AggroEvent(this, target, true);
             if (target is Unit)
             {
+                AggroEvent e = new AggroEvent(this, target, true);
                 ((Unit) target).OnAggroRecieved(e);
+                this.OnAggro(e);
             }
-            this.OnAggro(e);
             DamageEvent dmgEvent = new DamageEvent(new MeleeSwing(PathfindingTest.Combat.DamageEvent.DamageType.Melee, baseDamage), target, this);
             target.OnDamage(dmgEvent);
             this.fireCooldown = this.rateOfFire;

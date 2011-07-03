@@ -34,6 +34,7 @@ namespace PathfindingTest.Units
         public float collisionRadius { get; set; }
         private LinkedList<Unit> collisionWith { get; set; }
         public Boolean repelsOthers { get; set; }
+        public Boolean isDead = false;
         public Quad quad { get; set; }
 
         public float currentHealth { get; set; }
@@ -43,7 +44,6 @@ namespace PathfindingTest.Units
         public LinkedList<Building> buildingsInRange { get; set; }
         public LinkedList<Unit> friendliesProtectingMe { get; set; }
         public int baseDamage { get; set; }
-        public Boolean isDead = false;
         public Job job { get; set; }
 
         public Unit unitToStalk { get; set; }
@@ -503,7 +503,7 @@ namespace PathfindingTest.Units
                 unitToStalk = e.source;
             }
             this.currentHealth -= e.damageDone;
-            if (this.currentHealth <= 0)
+            if (this.currentHealth <= 0 && !this.isDead)
             {
                 this.Dispose();
             }
@@ -588,7 +588,7 @@ namespace PathfindingTest.Units
 
         public void UpdateAttack()
         {
-            if ((unitToStalk == null || isTargetDead()) && buildingToDestroy == null)
+            if (((unitToStalk == null) && (buildingToDestroy == null) || isTargetDead()))
             {
                 //get new target
                 CheckForEnemiesInRange(this.aggroRange);
@@ -646,6 +646,11 @@ namespace PathfindingTest.Units
                 unitToStalk = null;
                 return true;
             }
+            else if (buildingToDestroy != null && buildingToDestroy.isDestroyed)
+            {
+                buildingToDestroy = null;
+                return true;
+            }
             return false;
         }
 
@@ -656,7 +661,10 @@ namespace PathfindingTest.Units
         {
             this.isDead = true;
             this.player.units.Remove(this);
-            if (this.player.currentSelection != null) this.player.currentSelection.units.Remove(this);
+            if (this.player.currentSelection != null)
+            {
+                this.player.currentSelection.units.Remove(this);
+            }
         }
     }
 }

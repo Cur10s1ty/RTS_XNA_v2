@@ -11,6 +11,7 @@ using PathfindingTest.Combat;
 using PathfindingTest.Multiplayer.Data;
 using SocketLibrary.Protocol;
 using PathfindingTest.Pathfinding;
+using PathfindingTest.Buildings;
 
 namespace PathfindingTest.Units
 {
@@ -32,41 +33,41 @@ namespace PathfindingTest.Units
 
         public override void Update(KeyboardState ks, MouseState ms)
         {
-                UpdateMovement();
-                AttemptReload();
-                if (Game1.GetInstance().frames % 15 == 0 && unitToDefend == null)
-                {
-                    UpdateAttack();
-                }
-                else if (Game1.GetInstance().frames % 15 == 0 && unitToDefend != null)
-                {
-                    UpdateDefense();
-                }
+            UpdateMovement();
+            AttemptReload();
+            if (Game1.GetInstance().frames % 15 == 0 && unitToDefend == null)
+            {
+                UpdateAttack();
+            }
+            else if (Game1.GetInstance().frames % 15 == 0 && unitToDefend != null)
+            {
+                UpdateDefense();
+            }
 
-                if (Game1.GetInstance().frames % 4 == 0 && (unitToStalk != null || buildingToDestroy != null))
-                {
-                    TryToSwing();
-                }
+            if (Game1.GetInstance().frames % 4 == 0 && (unitToStalk != null || buildingToDestroy != null))
+            {
+                TryToSwing();
+            }
 
-                for (int i = 0; i < projectiles.Count; i++)
-                {
-                    projectiles.ElementAt(i).Update(ks, ms);
-                }
+            for (int i = 0; i < projectiles.Count; i++)
+            {
+                projectiles.ElementAt(i).Update(ks, ms);
+            }
         }
 
         internal override void Draw(SpriteBatch sb)
         {
-                sb.Draw(this.texture, new Vector2(x - (texture.Width / 2), y - (texture.Height / 2)), this.color);
+            sb.Draw(this.texture, new Vector2(x - (texture.Width / 2), y - (texture.Height / 2)), this.color);
 
-                /*if (this.DefineRectangle().Contains(Mouse.GetState().X, Mouse.GetState().Y))
-                {
-                    this.DrawHealthBar(sb);
-                }*/
+            /*if (this.DefineRectangle().Contains(Mouse.GetState().X, Mouse.GetState().Y))
+            {
+                this.DrawHealthBar(sb);
+            }*/
 
-                for (int i = 0; i < projectiles.Count; i++)
-                {
-                    projectiles.ElementAt(i).Draw(sb);
-                }
+            for (int i = 0; i < projectiles.Count; i++)
+            {
+                projectiles.ElementAt(i).Draw(sb);
+            }
         }
 
         public override void OnAggroRecieved(AggroEvent e)
@@ -106,10 +107,13 @@ namespace PathfindingTest.Units
         {
             if (this.fireCooldown < 0)
             {
-                AggroEvent e = new AggroEvent(this, unitToStalk, true);
-                unitToStalk.OnAggroRecieved(e);
-                this.OnAggro(e);
-                this.projectiles.AddLast(new Arrow(this, unitToStalk));
+                if (target is Unit)
+                {
+                    AggroEvent e = new AggroEvent(this, target, true);
+                    ((Unit)target).OnAggroRecieved(e);
+                    this.OnAggro(e);   
+                }
+                this.projectiles.AddLast(new Arrow(this, target));
                 this.fireCooldown = this.rateOfFire;
             }
         }

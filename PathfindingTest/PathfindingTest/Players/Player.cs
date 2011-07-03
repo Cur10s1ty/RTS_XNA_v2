@@ -93,7 +93,7 @@ namespace PathfindingTest.Players
 
             if (!Game1.GetInstance().IsMultiplayerGame())
             {
-                int unitCount = 75;
+                int unitCount = 20;
 
 
                 LinkedList<Unit> temp_units = new LinkedList<Unit>();
@@ -115,7 +115,7 @@ namespace PathfindingTest.Players
                     Point p = points.ElementAt(i);
                     if (i % 2 == 0)
                     {
-                        temp_units.AddLast(fastStore.getUnit(Unit.Type.Fast, p.X, p.Y));
+                        temp_units.AddLast(rangedStore.getUnit(Unit.Type.Ranged, p.X, p.Y));
                     }
                     else
                     {

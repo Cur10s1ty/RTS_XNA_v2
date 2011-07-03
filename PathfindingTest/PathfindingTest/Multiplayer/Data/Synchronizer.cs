@@ -145,7 +145,7 @@ namespace PathfindingTest.Multiplayer.Data
                     Packet newArrowPacket = new Packet(UnitHeaders.GAME_UNIT_RANGED_SHOT);
                     newArrowPacket.AddInt(toSync.multiplayerData.serverID);
                     newArrowPacket.AddInt(toSync.parent.multiplayerData.serverID);
-                    newArrowPacket.AddInt(toSync.target.multiplayerData.serverID);
+                    //newArrowPacket.AddInt(toSync.target.multiplayerData.serverID);
 
                     GameServerConnectionManager.GetInstance().SendPacket(newArrowPacket);
                     toSync.multiplayerData.isCreated = true;

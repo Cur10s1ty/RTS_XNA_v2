@@ -40,6 +40,7 @@ namespace PathfindingTest.Buildings
         public Boolean mouseOver { get; set; }
         public Boolean canPlace { get; set; }
         public Boolean constructionStarted { get; set; }
+        public Boolean isDestroyed = false;
         public State state { get; set; }
 
         public LinkedList<ProductionUnit> productionQueue { get; set; }
@@ -423,6 +424,7 @@ namespace PathfindingTest.Buildings
         /// </summary>
         public void Dispose()
         {
+            this.isDestroyed = true;
             productionQueue = null;
             p.buildings.Remove(this);
             if (this.mesh != null) mesh.Reverse();
@@ -471,7 +473,7 @@ namespace PathfindingTest.Buildings
         public void OnDamage(DamageEvent e)
         {
             this.currentHealth -= e.damageDone;
-            if (this.currentHealth <= 0)
+            if (this.currentHealth <= 0 && !this.isDestroyed)
             {
                 this.Dispose();
             }
